@@ -3,6 +3,8 @@ import logging
 import os
 
 from aiogram import Bot, Dispatcher
+from aiogram.client.default import DefaultBotProperties
+from aiogram.enums import ParseMode
 
 from app.bot.handlers import register_handlers
 
@@ -14,7 +16,10 @@ async def main() -> None:
     if not token:
         raise RuntimeError("TG_BOT_TOKEN is not set")
 
-    bot = Bot(token=token)
+    bot = Bot(
+        token=token,
+        default=DefaultBotProperties(parse_mode=ParseMode.HTML),
+    )
     me = await bot.get_me()
     logging.info("Bot started: @%s (%s)", me.username, me.id)
 
