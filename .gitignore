@@ -1,0 +1,8 @@
+.venv/
+__pycache__/
+*.py[cod]
+.idea/
+.env
+.env.*
+!.env.example
+postgres_data/

@@ -1,0 +1,35 @@
+services:
+  db:
+    image: postgres:15
+    container_name: bmw_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: bmw_service
+    ports:
+      - "${HOST_DB_PORT:-55432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d bmw_service"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  web:
+    build: .
+    container_name: bmw_web
+    command: sh -c "python -m app.database.init_db && python -m app.bot.main"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

@@ -1,0 +1,6 @@
+﻿sqlalchemy
+psycopg2-binary
+aiogram>=3.0.0,<4.0.0
+fastapi
+uvicorn
+python-dotenv
